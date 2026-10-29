@@ -223,6 +223,8 @@ ol.rank-list{list-style:none;margin:0;padding:0}
 .link-row:hover{color:var(--accent)}
 .arttab .l2{text-align:left;font-size:12.5px;white-space:nowrap}
 .viewer .link-row{pointer-events:none;cursor:default}
+.viewer .vtabs ~ * .link-row,.viewer .vtabs ~ .link-row{pointer-events:auto;cursor:pointer}
+.viewer .vtabs{top:0}
 .mob-only{display:none}
 /* phones: charts are drawn ~560 wide and shrunk to half, so their text gets bigger to stay readable */
 @media (max-width:700px){body:not(.snapping) .chart text[font-size="9.5"]{font-size:12px}body:not(.snapping) .chart text[font-size="10"]{font-size:12.5px}body:not(.snapping) .chart text[font-size="11"]{font-size:13.5px}body:not(.snapping) .chart text[font-size="12"]{font-size:14px}body:not(.snapping) .chart text[font-size="13"]{font-size:15px}body:not(.snapping) .chart text[font-size="14"]{font-size:16px}}
@@ -1971,7 +1973,7 @@ function renderArtistsIn(lib) {
     ${(t => `<div class="cgrid">${B ? topTogetherCard(P, t.pairs) : ''}${P.map(p => topBottomCard(p, t.per[p.id].map(r => ({ ...r, rel: relRank(r, p.id) })))).join('')}</div>`)(artistTopRows(P))}
     ${cols2([tnCard, spotCard, lenBarCard], [matchCard, corrCard, distCard, diffCard, lenCard].filter(Boolean))}
     <div class="cgrid">${rankCards}</div>
-    <p class="small muted" style="margin:0">Each artist is counted the way its own page counts it: its Albums only / Everything switch, the albums it counts, Drop worst, and repeated songs once. Averages are per song.${VIEWER ? '' : ' Tap an artist to open it.'}</p>
+    <p class="small muted" style="margin:0">Each artist is counted the way its own page counts it: its Albums only / Everything switch, the albums it counts, Drop worst, and repeated songs once. Averages are per song. Tap an artist to open ${VIEWER ? 'its tab' : 'it'}.</p>
     ${VIEWER ? `<p class="muted small" style="margin-top:30px">Made with Album Duel · snapshot from ${esc(VIEWER.date)}</p>` : snapFooter()}</div>`;
 }
 // tap an artist to leave it out of the whole page (and back in)
@@ -2666,8 +2668,9 @@ const ACT = {
   countStars: () => { S.ui.countStars = !S.ui.countStars; save(); renderAll(); },
   starCol: () => { S.ui.starCol = S.ui.starCol === false; save(); renderAll(); },
   artAlbAll: () => { S.ui.artAlbAll = !S.ui.artAlbAll; save(); rerender(); },
-  openBand: el => { if (el.dataset.slot) S.cur.slot = el.dataset.slot; S.cur.band = el.dataset.id; S.cur.album = null; delete S.cur.page; (S.ui.openBands = S.ui.openBands || {})[el.dataset.id] = true; document.body.classList.remove('drawer'); save(); renderAll(); window.scrollTo(0, 0); },
-  openAlbum: el => { if (el.dataset.slot) S.cur.slot = el.dataset.slot; S.cur.band = el.dataset.band; S.cur.album = el.dataset.id; delete S.cur.page; document.body.classList.remove('drawer'); save(); renderAll(); window.scrollTo(0, 0); },
+  vTab: el => { S.cur.vb = el.dataset.id || null; renderAll(); window.scrollTo(0, 0); },
+  openBand: el => { if (VIEWER) { S.cur.vb = el.dataset.id; renderAll(); window.scrollTo(0, 0); return; } if (el.dataset.slot) S.cur.slot = el.dataset.slot; S.cur.band = el.dataset.id; S.cur.album = null; delete S.cur.page; (S.ui.openBands = S.ui.openBands || {})[el.dataset.id] = true; document.body.classList.remove('drawer'); save(); renderAll(); window.scrollTo(0, 0); },
+  openAlbum: el => { if (VIEWER) { S.cur.vb = el.dataset.band; renderAll(); document.getElementById('al-' + el.dataset.id)?.scrollIntoView(); return; } if (el.dataset.slot) S.cur.slot = el.dataset.slot; S.cur.band = el.dataset.band; S.cur.album = el.dataset.id; delete S.cur.page; document.body.classList.remove('drawer'); save(); renderAll(); window.scrollTo(0, 0); },
   drawer: () => { document.body.classList.toggle('drawer'); },
   toggleBand: el => {
     const id = el.dataset.id, open = S.ui.openBands = S.ui.openBands || {}, now = id in open ? open[id] : id === S.cur.band;
@@ -3001,7 +3004,19 @@ function buildStaticBody({ b, als, pids, parts, whole: wholeOpt, controls = '' }
 function renderViewer() {
   document.body.classList.add('viewer');
   $('#side').innerHTML = '';
-  if (VIEWER.scope === 'artists') { const y = window.scrollY; S.cur.page = 'artists'; renderArtists(); window.scrollTo(0, y); return; }
+  if (VIEWER.scope === 'artists') {
+    const y = window.scrollY, bs = slot().bands.filter(b => b.albums.length && !artHidden(b)).sort((x, z) => x.name.localeCompare(z.name));
+    const vb = bs.find(b => b.id === S.cur.vb);
+    // tabs: the All artists page, then every artist's own discography page
+    const tabs = bs.length ? `<div class="toolbar vtabs" style="margin-top:0"><div class="tabs"><button class="${vb ? '' : 'on'}" data-act="vTab" data-id="">All artists</button>${bs.map(b => `<button class="${vb === b ? 'on' : ''}" data-act="vTab" data-id="${b.id}">${esc(b.name)}</button>`).join('')}</div></div>` : '';
+    if (vb) {
+      S.cur.band = vb.id; delete S.cur.page;
+      $('#main').innerHTML = tabs + buildStaticBody({ b: vb, als: statAlbums(vb), pids: slot().people.map(p => p.id), parts: { overview: true, band: true, scores: true }, whole: true,
+          controls: `<div class="viewer-bar">${dropBar()}${albumBar(vb)}</div>` })
+        + `<p class="muted small" style="margin-top:30px">Made with Album Duel · snapshot from ${esc(VIEWER.date)}</p>`;
+    } else { S.cur.page = 'artists'; renderArtists(); $('#main').insertAdjacentHTML('afterbegin', tabs); }
+    window.scrollTo(0, y); return;
+  }
   const b = band(), whole = VIEWER.scope === 'band';
   const y = window.scrollY; // keep the reader where they are when a toggle re-renders the page
   $('#main').innerHTML = buildStaticBody({ b, als: whole ? statAlbums(b) : b.albums, pids: slot().people.map(p => p.id), parts: VIEWER.parts, whole,
@@ -3040,7 +3055,7 @@ function buildStaticPage(o) {
 function artExportModal() {
   const lib = S.ui.artLib && libReady(), P = lib ? librarySlot().people : vis();
   if (P.length > 2) return toast('Show one or two people first (Showing, in the sidebar)');
-  modal(`<h2>Export page: ${lib ? 'my library' : 'all artists'}</h2><p class="muted small">Downloads one page with ${lib ? 'your scores from every save slot' : 'every artist in this slot'}. Put the file in your site folder next to index.html, upload the folder again, then send the link (e.g. <code>your-site.pages.dev/${lib ? 'my-library' : 'all-artists'}</code>). Anyone with the link can see it.</p>
+  modal(`<h2>Export page: ${lib ? 'my library' : 'all artists'}</h2><p class="muted small">Downloads one page with ${lib ? 'your scores from every save slot' : 'every artist in this slot'}, plus a tab for each artist's own discography page. Put the file in your site folder next to index.html, upload the folder again, then send the link (e.g. <code>your-site.pages.dev/${lib ? 'my-library' : 'all-artists'}</code>). Anyone with the link can see it.</p>
     <label class="f">${lib ? 'Name to show' : 'Whose data, and the name to show'}</label><div id="ax_people">${P.map(p => `<div class="row" style="margin-bottom:6px">
       <label class="chip" style="--c:${p.color};cursor:pointer;flex:none;min-width:110px"><input type="checkbox" value="${p.id}" checked ${lib ? 'disabled' : ''} style="width:auto;margin:0"> ${esc(p.name)}</label>
       <input class="ex-name" data-id="${p.id}" value="${esc(p.name)}" placeholder="Show as…"><input type="color" class="ex-col" data-id="${p.id}" value="${p.color}" style="width:40px;padding:2px;height:34px;flex:none"></div>`).join('')}</div>
