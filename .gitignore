@@ -1,0 +1,10 @@
+# Brainstorm scratch files (contain personal names)
+.superpowers/
+# Build output from the "Site app" button and exported pages
+/index.html
+/exports/
+# Share files and backups (personal scores)
+*.json
+!.claude/launch.json
+# Local Claude settings
+.claude/settings.local.json
