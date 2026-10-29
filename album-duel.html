@@ -225,6 +225,7 @@ ol.rank-list{list-style:none;margin:0;padding:0}
 .viewer .link-row{pointer-events:none;cursor:default}
 .viewer .vtabs ~ * .link-row,.viewer .vtabs ~ .link-row{pointer-events:auto;cursor:pointer}
 .viewer .vtabs{top:0}
+.vpick{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
 .mob-only{display:none}
 /* phones: charts are drawn ~560 wide and shrunk to half, so their text gets bigger to stay readable */
 @media (max-width:700px){body:not(.snapping) .chart text[font-size="9.5"]{font-size:12px}body:not(.snapping) .chart text[font-size="10"]{font-size:12.5px}body:not(.snapping) .chart text[font-size="11"]{font-size:13.5px}body:not(.snapping) .chart text[font-size="12"]{font-size:14px}body:not(.snapping) .chart text[font-size="13"]{font-size:15px}body:not(.snapping) .chart text[font-size="14"]{font-size:16px}}
@@ -2668,7 +2669,8 @@ const ACT = {
   countStars: () => { S.ui.countStars = !S.ui.countStars; save(); renderAll(); },
   starCol: () => { S.ui.starCol = S.ui.starCol === false; save(); renderAll(); },
   artAlbAll: () => { S.ui.artAlbAll = !S.ui.artAlbAll; save(); rerender(); },
-  vTab: el => { S.cur.vb = el.dataset.id || null; renderAll(); window.scrollTo(0, 0); },
+  vTab: el => { S.cur.vb = el.dataset.id || null; S.cur.vpick = false; renderAll(); window.scrollTo(0, 0); },
+  vPick: () => { S.cur.vpick = !S.cur.vpick; renderAll(); },
   openBand: el => { if (VIEWER) { S.cur.vb = el.dataset.id; renderAll(); window.scrollTo(0, 0); return; } if (el.dataset.slot) S.cur.slot = el.dataset.slot; S.cur.band = el.dataset.id; S.cur.album = null; delete S.cur.page; (S.ui.openBands = S.ui.openBands || {})[el.dataset.id] = true; document.body.classList.remove('drawer'); save(); renderAll(); window.scrollTo(0, 0); },
   openAlbum: el => { if (VIEWER) { S.cur.vb = el.dataset.band; renderAll(); document.getElementById('al-' + el.dataset.id)?.scrollIntoView(); return; } if (el.dataset.slot) S.cur.slot = el.dataset.slot; S.cur.band = el.dataset.band; S.cur.album = el.dataset.id; delete S.cur.page; document.body.classList.remove('drawer'); save(); renderAll(); window.scrollTo(0, 0); },
   drawer: () => { document.body.classList.toggle('drawer'); },
@@ -2796,7 +2798,7 @@ const ACT = {
   artLib: el => { S.ui.artLib = !!el.dataset.v; save(); rerender(); },
   libPick: el => { const m = S.ui.libPick = S.ui.libPick || {}; if (el.dataset.s) m[el.dataset.k] = el.dataset.s; else delete m[el.dataset.k]; save(); rerender(); },
   artExport: artExportModal,
-  artExGo: () => {
+  artExGo: async () => {
     const lib = S.ui.artLib && libReady(), src = lib ? librarySlot() : slot();
     const pids = lib ? ['__me'] : $$('#ax_people input:checked').map(i => i.value);
     if (!pids.length) return toast('Pick at least one person');
@@ -2808,6 +2810,10 @@ const ACT = {
     const bands = src.bands.map(b => ({ id: b.id, name: b.name, relScope: b.relScope, hiddenAlbums: b.hiddenAlbums || [], best: {},
       albums: b.albums.map(a => ({ id: a.id, title: a.title, nick: a.nick, year: a.year, type: a.type, off: a.off, tracks: a.tracks.map(t => ({ id: t.id, title: t.title, short: t.short, ms: t.ms })), scores: keep(a.scores), ranks: keep(a.ranks), ties: keep(a.ties) })) }))
       .filter(b => !artHidden(b) && b.albums.some(a => pids.some(p => myRated(a, p))));
+    // covers for the artist tabs, shrunk to card size so the file stays small
+    toast('Building page…');
+    const covers = new Map(src.bands.flatMap(b => b.albums).map(a => [a.id, a.cover]));
+    await Promise.all(bands.flatMap(b => b.albums).map(async a => { const c = covers.get(a.id); if (c) a.cover = await imgToDataUrl(c, 240).catch(() => c); }));
     const data = { v: 1, slots: [{ id: 'x', name: people.map(p => p.name).join(' & '), people, bands, view: {} }], cur: { slot: 'x', page: 'artists' }, ui: Object.assign({}, S.ui, { simple: false, artLib: false }) };
     const html = appHtml(JSON.stringify({ instance: 'viewer', viewer: { scope: 'artists', lib, date: new Date().toLocaleDateString('en-US') }, data }));
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
@@ -3007,8 +3013,9 @@ function renderViewer() {
   if (VIEWER.scope === 'artists') {
     const y = window.scrollY, bs = slot().bands.filter(b => b.albums.length && !artHidden(b)).sort((x, z) => x.name.localeCompare(z.name));
     const vb = bs.find(b => b.id === S.cur.vb);
-    // tabs: the All artists page, then every artist's own discography page
-    const tabs = bs.length ? `<div class="toolbar vtabs" style="margin-top:0"><div class="tabs"><button class="${vb ? '' : 'on'}" data-act="vTab" data-id="">All artists</button>${bs.map(b => `<button class="${vb === b ? 'on' : ''}" data-act="vTab" data-id="${b.id}">${esc(b.name)}</button>`).join('')}</div></div>` : '';
+    // two tabs: the All artists page, and one artist's own discography page (picked from a list that opens on tap)
+    const tabs = bs.length ? `<div class="toolbar vtabs" style="margin-top:0"><div class="tabs"><button class="${vb ? '' : 'on'}" data-act="vTab" data-id="">All artists</button><button class="${vb ? 'on' : ''}" data-act="vPick">${vb ? esc(vb.name) : 'Pick an artist'} ${S.cur.vpick ? '▴' : '▾'}</button></div></div>`
+      + (S.cur.vpick ? `<div class="vpick">${bs.map(b => `<button class="btn sm${vb === b ? ' primary' : ''}" data-act="vTab" data-id="${b.id}">${esc(b.name)}</button>`).join('')}</div>` : '') : '';
     if (vb) {
       S.cur.band = vb.id; delete S.cur.page;
       $('#main').innerHTML = tabs + buildStaticBody({ b: vb, als: statAlbums(vb), pids: slot().people.map(p => p.id), parts: { overview: true, band: true, scores: true }, whole: true,
@@ -3055,11 +3062,11 @@ function buildStaticPage(o) {
 function artExportModal() {
   const lib = S.ui.artLib && libReady(), P = lib ? librarySlot().people : vis();
   if (P.length > 2) return toast('Show one or two people first (Showing, in the sidebar)');
-  modal(`<h2>Export page: ${lib ? 'my library' : 'all artists'}</h2><p class="muted small">Downloads one page with ${lib ? 'your scores from every save slot' : 'every artist in this slot'}, plus a tab for each artist's own discography page. Put the file in your site folder next to index.html, upload the folder again, then send the link (e.g. <code>your-site.pages.dev/${lib ? 'my-library' : 'all-artists'}</code>). Anyone with the link can see it.</p>
+  modal(`<h2>Export page: ${lib ? 'my library' : 'all artists'}</h2><p class="muted small">Downloads one page with ${lib ? 'your scores from every save slot' : 'every artist in this slot'}, plus a “Pick an artist” tab that opens each artist's own discography page. Put the file in your site folder next to index.html, upload the folder again, then send the link (e.g. <code>your-site.pages.dev/${lib ? 'my-library' : 'all-artists'}</code>). Anyone with the link can see it.</p>
     <label class="f">${lib ? 'Name to show' : 'Whose data, and the name to show'}</label><div id="ax_people">${P.map(p => `<div class="row" style="margin-bottom:6px">
       <label class="chip" style="--c:${p.color};cursor:pointer;flex:none;min-width:110px"><input type="checkbox" value="${p.id}" checked ${lib ? 'disabled' : ''} style="width:auto;margin:0"> ${esc(p.name)}</label>
       <input class="ex-name" data-id="${p.id}" value="${esc(p.name)}" placeholder="Show as…"><input type="color" class="ex-col" data-id="${p.id}" value="${p.color}" style="width:40px;padding:2px;height:34px;flex:none"></div>`).join('')}</div>
-    <p class="small muted" style="margin:2px 0 0">Names and colours here only change the exported page. Only the people ticked are in the file (no notes, history or covers).</p>
+    <p class="small muted" style="margin:2px 0 0">Names and colours here only change the exported page. Only the people ticked are in the file (no notes or history; covers are shrunk to card size).</p>
     <p class="small" style="margin:10px 0 0;color:var(--warn)">It's a snapshot: after you change scores here, export again and redeploy to update it.</p>
     <div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn primary" data-act="artExGo">Download page</button></div>`);
 }
