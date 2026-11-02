@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Album Duel Styles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700;800&family=Lato:wght@400;700&family=Newsreader:opsz,wght@6..72,500;6..72,700&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* picker chrome (not part of the design being judged) */
+body{margin:0;font:14px/1.45 Inter,system-ui,sans-serif;background:#ddd}
+.picker{position:sticky;top:0;z-index:50;background:#111;color:#eee;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-family:Inter,system-ui,sans-serif}
+.picker b{font-weight:600}
+.picker .tabs{display:flex;flex-wrap:wrap;gap:6px}
+.picker button{font:inherit;font-size:13px;background:#222;color:#ddd;border:1px solid #333;border-radius:8px;padding:6px 10px;cursor:pointer}
+.picker button.on{background:#fff;color:#111;border-color:#fff}
+.picker .sw{display:flex;gap:6px;align-items:center}
+.picker .sw button{padding:4px 6px;display:flex;gap:3px}
+.picker .sw i{display:block;width:16px;height:16px;border-radius:50%}
+.note{background:#1b1b1b;color:#bbb;padding:8px 16px;font-size:13px;font-family:Inter,system-ui,sans-serif;border-top:1px solid #2a2a2a}
+.note b{color:#fff}
+
+/* the app mock */
+.app{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;font-size:14px}
+.app *{box-sizing:border-box}
+.num{font-family:var(--numf);font-variant-numeric:tabular-nums}
+.top{display:flex;align-items:center;gap:18px;padding:12px 24px;border-bottom:var(--bw) solid var(--line);background:var(--topbg)}
+.logo{font-family:var(--head);font-weight:var(--hw);font-size:19px;letter-spacing:var(--hls);display:flex;gap:8px;align-items:center;color:var(--headc)}
+.logo .mk{width:18px;height:18px;border-radius:var(--mkr);background:linear-gradient(90deg,var(--a) 50%,var(--b) 50%)}
+.nav{display:flex;gap:4px;margin-left:12px}
+.nav span{padding:6px 12px;border-radius:var(--r2);color:var(--muted);font-weight:500;font-size:13px;cursor:default}
+.nav span.on{color:var(--navOnC);background:var(--navOnBg);box-shadow:var(--navOnSh)}
+.top .sp{flex:1}
+.ghost{font-size:13px;padding:6px 12px;border:var(--bw) solid var(--line);border-radius:var(--r2);color:var(--text)}
+.prim{font-size:13px;padding:6px 12px;border-radius:var(--r2);background:var(--accent);color:var(--accentC);font-weight:600;border:var(--bw) solid var(--primB)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 60px}
+.hero{display:grid;grid-template-columns:150px 1fr auto;gap:24px;align-items:end;padding-bottom:22px;border-bottom:var(--heroRule)}
+.cover{width:150px;height:150px;border-radius:var(--r1);background:radial-gradient(circle at 30% 30%,#d8dde3,#8e9aa6 45%,#3b4650);box-shadow:var(--coverSh);position:relative;overflow:hidden}
+.cover:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 14px,rgba(255,255,255,.12) 14px 16px)}
+.kick{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--kickC);font-weight:600;margin-bottom:6px}
+h1.t{font-family:var(--head);font-weight:var(--hw);font-size:44px;line-height:1.02;letter-spacing:var(--hls);margin:0;color:var(--headc)}
+.sub{color:var(--muted);margin-top:8px;font-size:15px}
+.duo{display:flex;gap:26px;text-align:right}
+.duo .who{font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center;justify-content:flex-end}
+.duo .who i{width:9px;height:9px;border-radius:50%}
+.duo .big{font-family:var(--numf);font-size:40px;font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap);margin-top:var(--gap)}
+.card{background:var(--panel);border:var(--bw) solid var(--cardLine);border-radius:var(--r1);padding:18px 20px;box-shadow:var(--cardSh)}
+.card h3{font-family:var(--h3f);font-size:var(--h3s);font-weight:700;margin:0 0 4px;color:var(--headc);letter-spacing:var(--h3ls);text-transform:var(--h3tt)}
+.card .cap{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+.c12{grid-column:span 12}.c8{grid-column:span 8}.c7{grid-column:span 7}.c5{grid-column:span 5}.c4{grid-column:span 4}.c3{grid-column:span 3}
+.kpi .l{font-size:12px;color:var(--muted);text-transform:var(--kpiTT);letter-spacing:var(--kpiLS)}
+.kpi .v{font-family:var(--numf);font-size:30px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums;color:var(--headc)}
+.kpi .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+.kpi .v small{font-size:15px;color:var(--muted);font-weight:500}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;text-align:left;padding:0 8px 8px;border-bottom:var(--bw) solid var(--line)}
+td{padding:7px 8px;border-bottom:1px solid var(--rowLine)}
+tr:last-child td{border-bottom:0}
+td.n{color:var(--muted);width:28px}
+td.len{color:var(--muted);width:56px}
+.pill{display:inline-block;min-width:44px;text-align:center;padding:3px 0;border-radius:var(--r3);font-weight:600;font-family:var(--numf);font-variant-numeric:tabular-nums;font-size:13px}
+.pill.star{box-shadow:inset 0 0 0 2px var(--star)}
+.gap{position:relative;height:14px;width:120px}
+.gap .mid{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line)}
+.gap .bar{position:absolute;top:3px;height:8px;border-radius:2px}
+.legend{display:flex;gap:4px;align-items:center;font-size:11.5px;color:var(--muted);margin-top:12px;flex-wrap:wrap}
+.legend .pill{min-width:38px;font-size:11.5px}
+.mx td{text-align:center;padding:4px;border:0}
+.mx td.rh{text-align:left;color:var(--muted);font-size:12.5px;padding-right:10px}
+.mx th{text-align:center;border:0}
+.mx .cell{border-radius:var(--r3);padding:9px 0;font-weight:600;font-family:var(--numf);font-variant-numeric:tabular-nums}
+.mx .self{color:var(--muted);opacity:.5}
+.takes li{margin:0 0 10px;padding-left:2px}
+.takes{padding-left:18px;margin:0}
+.takes b{color:var(--headc)}
+svg text{font-family:var(--body)}
+@media (max-width:880px){
+  .hero{grid-template-columns:90px 1fr}.cover{width:90px;height:90px}.duo{grid-column:1/-1;justify-content:flex-start;text-align:left}.duo .who{justify-content:flex-start}
+  h1.t{font-size:30px}.c8,.c7,.c5,.c4{grid-column:span 12}.c3{grid-column:span 6}.nav{display:none}.wrap{padding:18px 16px}.gap{width:60px}
+}
+</style>
+</head>
+<body>
+<div class="picker">
+  <b>Style</b><div class="tabs" id="tabs"></div>
+  <div class="sw" id="acc"></div>
+  <b>People</b><div class="sw" id="sw"></div>
+</div>
+<div class="note" id="note"></div>
+<div class="app" id="app"></div>
+
+<script>
+const T = {
+  mix:{name:'★ Mix', inspo:'<b>Mix</b>: Bloomberg true black + Pudding rounded cards, pill buttons and pill scores + Letterboxd font (Inter Tight). Pick an accent and a pair below.',
+    v:{bg:'#0a0a0a',panel:'#141414',topbg:'#0a0a0a',line:'#2a2a2a',cardLine:'#222',rowLine:'#1e1e1e',text:'#d4d7db',muted:'#8c9196',headc:'#ffffff',
+      head:'"Inter Tight",system-ui,sans-serif',body:'"Inter Tight",system-ui,sans-serif',numf:'"Inter Tight",system-ui,sans-serif',h3f:'"Inter Tight",system-ui,sans-serif',h3s:'17px',h3ls:'-.01em',h3tt:'none',
+      hw:800,hls:'-.025em',accentC:'#0a0a0a',primB:'transparent',bw:'1px',r1:'16px',r2:'999px',r3:'999px',mkr:'6px',gap:'16px',
+      cardSh:'none',coverSh:'0 10px 30px rgba(0,0,0,.6)',heroRule:'1px solid #222',navOnC:'#0a0a0a',navOnSh:'none',kpiTT:'none',kpiLS:'0',star:'#ffd23f'},
+    accents:['#fb8b1e','#00e054','#ffd23f','#ff5a36','#c9b6ff'],
+    heat:['#1f9d55','#57c27a','#d9c13a','#e8892b','#d6453d','#8b5cf6'],heatTxt:['#fff','#000','#000','#000','#fff','#fff'],
+    pairs:[['#4aa8ff','#fb8b1e'],['#40bcf4','#ff8000'],['#2e5bff','#ff5a36'],['#00d1b2','#ff4f6d'],['#00e054','#c9b6ff']]},
+  ft:{name:'FT', inspo:'<b>Financial Times</b>: warm salmon paper, serif headlines, claret + oxford blue. Reads like a newspaper graphic; calm and serious.',
+    v:{bg:'#fff1e5',panel:'#fff7ef',topbg:'#fff1e5',line:'#e3cdb9',cardLine:'#ecd9c6',rowLine:'#f1e1d1',text:'#33302e',muted:'#6f6762',headc:'#1a1817',
+      head:'Newsreader,Georgia,serif',body:'Inter,system-ui,sans-serif',numf:'Inter,system-ui,sans-serif',h3f:'Newsreader,Georgia,serif',h3s:'19px',h3ls:'0',h3tt:'none',
+      hw:700,hls:'-.01em',accent:'#990f3d',accentC:'#fff',primB:'transparent',kickC:'#990f3d',bw:'1px',r1:'2px',r2:'2px',r3:'2px',mkr:'0',gap:'18px',
+      cardSh:'none',coverSh:'none',heroRule:'4px solid #1a1817',navOnC:'#1a1817',navOnBg:'transparent',navOnSh:'inset 0 -3px 0 #990f3d',kpiTT:'none',kpiLS:'0',star:'#b08d3c'},
+    heat:['#0d5d61','#3a9a92','#cfe0c3','#f6c88f','#e8806b','#990f3d'],heatTxt:['#fff','#fff','#1a1817','#1a1817','#1a1817','#fff'],
+    pairs:[['#0f5499','#eb5e8d'],['#0d7680','#990f3d'],['#262a33','#ff8833']]},
+  owid:{name:'Our World in Data', inspo:'<b>Our World in Data</b>: clean white, Playfair headlines, muted academic palette, lots of air. The most "trustworthy research" look.',
+    v:{bg:'#f7f7f7',panel:'#ffffff',topbg:'#002147',line:'#dadada',cardLine:'#e6e6e6',rowLine:'#efefef',text:'#3d3d3d',muted:'#767676',headc:'#002147',
+      head:'"Playfair Display",Georgia,serif',body:'Lato,system-ui,sans-serif',numf:'Lato,system-ui,sans-serif',h3f:'"Playfair Display",Georgia,serif',h3s:'19px',h3ls:'0',h3tt:'none',
+      hw:700,hls:'0',accent:'#ce261e',accentC:'#fff',primB:'transparent',kickC:'#ce261e',bw:'1px',r1:'0',r2:'3px',r3:'2px',mkr:'50%',gap:'20px',
+      cardSh:'0 1px 2px rgba(0,0,0,.04)',coverSh:'0 2px 8px rgba(0,0,0,.15)',heroRule:'1px solid #dadada',navOnC:'#fff',navOnBg:'rgba(255,255,255,.14)',navOnSh:'none',kpiTT:'uppercase',kpiLS:'.06em',star:'#c49a2c'},
+    heat:['#2166ac','#67a9cf','#d1e5f0','#fddbc7','#ef8a62','#b2182b'],heatTxt:['#fff','#fff','#002147','#3d3d3d','#fff','#fff'],
+    pairs:[['#6d3e91','#c05917'],['#286bbb','#c15065'],['#58ac8c','#883039']],
+    topDark:true},
+  pud:{name:'The Pudding', inspo:'<b>The Pudding</b>: off-white, chunky playful serif, thick black outlines, bold flat colours. Fun and shareable, built for music/culture stories.',
+    v:{bg:'#fbf7ee',panel:'#ffffff',topbg:'#fbf7ee',line:'#111',cardLine:'#111',rowLine:'#ece6d8',text:'#1b1b1b',muted:'#6b665c',headc:'#111',
+      head:'Fraunces,Georgia,serif',body:'"DM Sans",system-ui,sans-serif',numf:'"DM Mono",monospace',h3f:'Fraunces,Georgia,serif',h3s:'20px',h3ls:'0',h3tt:'none',
+      hw:800,hls:'-.02em',accent:'#ffd23f',accentC:'#111',primB:'#111',kickC:'#1b1b1b',bw:'2px',r1:'14px',r2:'999px',r3:'999px',mkr:'4px',gap:'20px',
+      cardSh:'4px 4px 0 #111',coverSh:'5px 5px 0 #111',heroRule:'2px solid #111',navOnC:'#111',navOnBg:'#ffd23f',navOnSh:'inset 0 0 0 2px #111',kpiTT:'none',kpiLS:'0',star:'#111'},
+    heat:['#0b6e4f','#3fb984','#ffd23f','#ff9f43','#ff5a36','#7b2cbf'],heatTxt:['#fff','#111','#111','#111','#111','#fff'],
+    pairs:[['#2e5bff','#ff5a36'],['#7b2cbf','#0b9e6f'],['#111111','#ff3e9a']]},
+  lbx:{name:'Letterboxd', inspo:'<b>Letterboxd</b>: the best-loved rating site. Slate dark (greyer than now), crisp white headings, signature green/orange/blue. Familiar to anyone who rates things.',
+    v:{bg:'#14181c',panel:'#1c2228',topbg:'#14181c',line:'#2c3440',cardLine:'#242c34',rowLine:'#242c34',text:'#c8d0d8',muted:'#8899aa',headc:'#ffffff',
+      head:'"Inter Tight",system-ui,sans-serif',body:'"Inter Tight",system-ui,sans-serif',numf:'"Inter Tight",system-ui,sans-serif',h3f:'"Inter Tight",system-ui,sans-serif',h3s:'12px',h3ls:'.1em',h3tt:'uppercase',
+      hw:800,hls:'-.02em',accent:'#00e054',accentC:'#0b1a10',primB:'transparent',kickC:'#00e054',bw:'1px',r1:'6px',r2:'4px',r3:'3px',mkr:'50%',gap:'16px',
+      cardSh:'none',coverSh:'0 0 0 1px rgba(255,255,255,.1),0 8px 24px rgba(0,0,0,.5)',heroRule:'1px solid #2c3440',navOnC:'#fff',navOnBg:'transparent',navOnSh:'inset 0 -2px 0 #00e054',kpiTT:'uppercase',kpiLS:'.08em',star:'#ffd75e'},
+    heat:['#00b84a','#6fcf6a','#e6c440','#f08a2a','#e0483e','#8e5bd6'],heatTxt:['#04140a','#04140a','#1a1500','#1a0d00','#fff','#fff'],
+    pairs:[['#40bcf4','#ff8000'],['#00e054','#ff8000'],['#40bcf4','#ff5c8a']]},
+  term:{name:'Bloomberg', inspo:'<b>Bloomberg terminal / FiveThirtyEight data</b>: true black (no blue), monospace numbers, amber accent, dense and sharp. Looks like serious analytics.',
+    v:{bg:'#0a0a0a',panel:'#121212',topbg:'#000',line:'#2a2a2a',cardLine:'#222',rowLine:'#1d1d1d',text:'#d6d6d6',muted:'#8a8a8a',headc:'#fff',
+      head:'"IBM Plex Sans",system-ui,sans-serif',body:'"IBM Plex Sans",system-ui,sans-serif',numf:'"IBM Plex Mono",monospace',h3f:'"IBM Plex Mono",monospace',h3s:'12px',h3ls:'.08em',h3tt:'uppercase',
+      hw:600,hls:'-.01em',accent:'#fb8b1e',accentC:'#000',primB:'transparent',kickC:'#fb8b1e',bw:'1px',r1:'0',r2:'0',r3:'0',mkr:'0',gap:'12px',
+      cardSh:'none',coverSh:'none',heroRule:'1px solid #fb8b1e',navOnC:'#000',navOnBg:'#fb8b1e',navOnSh:'none',kpiTT:'uppercase',kpiLS:'.08em',star:'#fb8b1e'},
+    heat:['#1f9d55','#57c27a','#d9c13a','#e8892b','#d6453d','#8b5cf6'],heatTxt:['#fff','#000','#000','#000','#fff','#fff'],
+    pairs:[['#4aa8ff','#fb8b1e'],['#fb8b1e','#e5e5e5'],['#00d1b2','#ff4f6d']]}
+};
+
+const tracks=[['Airbag','4:44',8.5,8],['Paranoid Android','6:23','10*',9.5],['Subterranean Homesick Alien','4:27',8,7.5],['Exit Music (For a Film)','4:24',9.5,10],
+['Let Down','4:59',10,9],['Karma Police','4:21',9.5,10],['Fitter Happier','1:57',5,4],['Electioneering','3:50',7,7.5],['Climbing Up the Walls','4:45',8.5,7],
+['No Surprises','3:48',9,9.5],['Lucky','4:19',9,8.5],['The Tourist','5:24',8,9]];
+const num=v=>v==='10*'?10:v;
+const people=['Breno','Lucas','Marina','Theo'];
+const mx=[[null,86,74,61],[86,null,79,58],[74,79,null,83],[61,58,83,null]];
+
+let cur='mix', pairIx=3, accIx=4;
+function heatIx(v){return v>=9?0:v>=8?1:v>=7?2:v>=6?3:v>=5?4:5}
+function pill(v,t){const n=num(v),i=heatIx(n);return `<span class="pill${v==='10*'?' star':''}" style="background:${t.heat[i]};color:${t.heatTxt[i]}">${v==='10*'?'10★':n%1?n.toFixed(1):n}</span>`}
+function mxPill(p,t){const i=heatIx(p/10);return `<div class="cell" style="background:${t.heat[i]};color:${t.heatTxt[i]}">${p}%</div>`}
+
+function lineChart(t,A,B){
+  const W=700,H=230,L=34,R=12,Tp=12,Bt=30,xs=i=>L+i*(W-L-R)/(tracks.length-1),ys=v=>Tp+(10-v)*(H-Tp-Bt)/6;
+  let g='';for(let v=4;v<=10;v+=2)g+=`<line x1="${L}" x2="${W-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="${t.v.rowLine}"/><text x="${L-8}" y="${ys(v)+4}" text-anchor="end" font-size="11" fill="${t.v.muted}">${v}</text>`;
+  tracks.forEach((_,i)=>g+=`<text x="${xs(i)}" y="${H-10}" text-anchor="middle" font-size="11" fill="${t.v.muted}">${i+1}</text>`);
+  const path=(k,c)=>`<polyline fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round" points="${tracks.map((r,i)=>xs(i)+','+ys(num(r[k]))).join(' ')}"/>`+
+    tracks.map((r,i)=>`<circle cx="${xs(i)}" cy="${ys(num(r[k]))}" r="3.6" fill="${c}" stroke="${t.v.panel}" stroke-width="1.5"/>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%">${g}${path(2,A)}${path(3,B)}</svg>`;
+}
+function dist(t,A,B){
+  const bins=[4,5,6,7,8,9,10],c=k=>bins.map(b=>tracks.filter(r=>Math.floor(num(r[k]))===b).length);
+  const a=c(2),b=c(3),W=420,H=200,L=10,Bt=26,bw=(W-2*L)/bins.length,h=n=>n*(H-Bt-10)/5;
+  let s='';bins.forEach((v,i)=>{const x=L+i*bw;
+    s+=`<rect x="${x+bw*.14}" y="${H-Bt-h(a[i])}" width="${bw*.34}" height="${h(a[i])}" fill="${A}" rx="${t.v.r3==='0'?0:2}"/>`;
+    s+=`<rect x="${x+bw*.52}" y="${H-Bt-h(b[i])}" width="${bw*.34}" height="${h(b[i])}" fill="${B}" rx="${t.v.r3==='0'?0:2}"/>`;
+    s+=`<text x="${x+bw/2}" y="${H-8}" text-anchor="middle" font-size="11" fill="${t.v.muted}">${v}</text>`;});
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%"><line x1="${L}" x2="${W-L}" y1="${H-Bt}" y2="${H-Bt}" stroke="${t.v.line}"/>${s}</svg>`;
+}
+
+function render(){
+  const t=T[cur],[A,B]=t.pairs[pairIx],app=document.getElementById('app');
+  for(const k in t.v)app.style.setProperty('--'+k.replace(/[A-Z]/g,m=>m),t.v[k]);
+  app.style.setProperty('--a',A);app.style.setProperty('--b',B);
+  if(t.accents){const ac=t.accents[accIx];['accent','kickC','navOnBg'].forEach(k=>app.style.setProperty('--'+k,ac));}
+  const avg=k=>(tracks.reduce((s,r)=>s+num(r[k]),0)/tracks.length).toFixed(2);
+  const topC=t.topDark?'#fff':'';
+  const rows=tracks.map((r,i)=>{const d=num(r[2])-r[3],w=Math.abs(d)*22;
+    return `<tr><td class="n num">${i+1}</td><td>${r[0]}</td><td class="len num">${r[1]}</td><td>${pill(r[2],t)}</td><td>${pill(r[3],t)}</td>
+    <td><div class="gap"><div class="mid"></div><div class="bar" style="background:${d>0?A:B};${d>0?'right:50%':'left:50%'};width:${w}px"></div></div></td></tr>`}).join('');
+  app.innerHTML=`
+  <div class="top" ${t.topDark?'style="color:#fff;border-color:transparent"':''}>
+    <div class="logo" ${topC?`style="color:${topC}"`:''}><span class="mk"></span>Album Duel</div>
+    <div class="nav"><span>Ratings</span><span class="on">Rankings</span><span>Stats</span><span>History</span></div>
+    <div class="sp"></div><span class="ghost" ${topC?'style="color:#fff;border-color:rgba(255,255,255,.3)"':''}>Share</span><span class="prim">Copy image</span>
+  </div>
+  <div class="wrap">
+    <div class="hero">
+      <div class="cover"></div>
+      <div><div class="kick">Radiohead · 1997 · Album 3 of 9</div><h1 class="t">OK Computer</h1>
+        <div class="sub">12 songs · 53:21 · rated by Breno &amp; Lucas</div></div>
+      <div class="duo">
+        <div><div class="who"><i style="background:${A}"></i>Breno</div><div class="big" style="color:${A}">${avg(2)}</div></div>
+        <div><div class="who"><i style="background:${B}"></i>Lucas</div><div class="big" style="color:${B}">${avg(3)}</div></div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card kpi c3"><div class="l">Agreement</div><div class="v">86<small>%</small></div><div class="d">Top 10% of your duels</div></div>
+      <div class="card kpi c3"><div class="l">Shared favourite</div><div class="v" style="font-size:22px;line-height:1.35">Karma Police</div><div class="d">9.5 · 10</div></div>
+      <div class="card kpi c3"><div class="l">Biggest split</div><div class="v" style="font-size:22px;line-height:1.35">Climbing Up…</div><div class="d">Breno +1.5</div></div>
+      <div class="card kpi c3"><div class="l">Album rank</div><div class="v">#1<small> / 9</small></div><div class="d">Both agree</div></div>
+
+      <div class="card c7"><h3>Every song</h3><p class="cap">Scores side by side; the bar shows who rated it higher.</p>
+        <table><thead><tr><th>#</th><th>Song</th><th>Len</th><th>Breno</th><th>Lucas</th><th>Gap</th></tr></thead><tbody>${rows}</tbody></table>
+        <div class="legend">Scale ${['9+','8','7','6','5','<5'].map((l,i)=>`<span class="pill" style="background:${t.heat[i]};color:${t.heatTxt[i]}">${l}</span>`).join('')} &nbsp; ★ = special 10</div>
+      </div>
+      <div class="c5" style="display:flex;flex-direction:column;gap:var(--gap)">
+        <div class="card"><h3>Song by song</h3><p class="cap">Score across the tracklist.</p>${lineChart(t,A,B)}</div>
+        <div class="card"><h3>Hot takes</h3><p class="cap">Where you disagree the most.</p>
+          <ul class="takes"><li><b>Climbing Up the Walls</b>: Breno 8.5, Lucas 7. Breno's 4th favourite, Lucas's 3rd least.</li>
+          <li><b>Let Down</b>: Breno gave it a 10; Lucas thinks it's only his 6th best.</li>
+          <li><b>The Tourist</b>: Lucas +1. He ranks the closer above Paranoid Android.</li></ul></div>
+      </div>
+      <div class="card c5"><h3>Score distribution</h3><p class="cap">How generous each of you is.</p>${dist(t,A,B)}</div>
+      <div class="card c7"><h3>Who agrees with whom</h3><p class="cap">Group view, match % across all 9 albums.</p>
+        <table class="mx"><thead><tr><th></th>${people.map(p=>`<th>${p}</th>`).join('')}</tr></thead><tbody>
+        ${people.map((p,i)=>`<tr><td class="rh">${p}</td>${mx[i].map(v=>`<td>${v==null?'<div class="cell self">·</div>':mxPill(v,t)}</td>`).join('')}</tr>`).join('')}
+        </tbody></table></div>
+    </div>
+  </div>`;
+  document.getElementById('note').innerHTML=t.inspo;
+  document.getElementById('tabs').innerHTML=Object.keys(T).map(k=>`<button class="${k===cur?'on':''}" onclick="cur='${k}';pairIx=0;render()">${T[k].name}</button>`).join('');
+  document.getElementById('acc').innerHTML=t.accents?'<b>Accent</b> '+t.accents.map((c,i)=>`<button class="${i===accIx?'on':''}" title="${c}" onclick="accIx=${i};render()"><i style="background:${c}"></i></button>`).join(''):'';
+  document.getElementById('sw').innerHTML=t.pairs.map((p,i)=>`<button class="${i===pairIx?'on':''}" title="${p.join(' / ')}" onclick="pairIx=${i};render()"><i style="background:${p[0]}"></i><i style="background:${p[1]}"></i></button>`).join('');
+}
+render();
+</script>
+</body>
+</html>
