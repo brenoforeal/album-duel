@@ -5,21 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Album Duel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root{
-  --bg:#0e1015;--panel:#161922;--panel2:#1d212c;--line:#2a2f3c;--text:#e9ebf1;--muted:#8d94a6;
-  --accent:#c9b6ff;--good:#6fdc9a;--warn:#ffd166;--bad:#ff7a7a;--radius:14px;
+  --bg:#0a0a0a;--panel:#141414;--panel2:#1c1c1c;--line:#2a2a2a;--text:#d4d7db;--muted:#8c9196;
+  --accent:#c9b6ff;--good:#6fdc9a;--warn:#ffd166;--bad:#ff7a7a;--radius:16px;--head:#fff;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .snap-area p,.snap-area li{max-height:1000000px} /* opts long text out of Android font boosting */
-html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 "Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
 button,input,select,textarea{font:inherit;color:inherit}
-h1,h2,h3{margin:0;line-height:1.2}
-h1{font-size:28px;font-weight:800;letter-spacing:-.02em}
+h1,h2,h3{margin:0;line-height:1.2;color:var(--head)}
+h1{font-size:28px;font-weight:800;letter-spacing:-.025em}
 h2{font-size:20px;font-weight:700}
 h3{font-size:15px;font-weight:700;margin-bottom:10px}
 .muted{color:var(--muted)}
@@ -27,9 +27,9 @@ h3{font-size:15px;font-weight:700;margin-bottom:10px}
 .hidden,[hidden]{display:none!important}
 
 /* top bar */
-.top{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:rgba(14,16,21,.94);backdrop-filter:blur(8px)}
+.top{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:rgba(10,10,10,.94);backdrop-filter:blur(8px)}
 .logo{font-weight:800;letter-spacing:-.02em;font-size:17px;display:flex;align-items:center;gap:8px}
-.logo .dot{width:18px;height:18px;border-radius:50%;background:conic-gradient(#5aa9ff 0 50%,#ff5a5f 50% 100%);box-shadow:0 0 0 3px #0e1015,0 0 0 4px #2a2f3c}
+.logo .dot{width:18px;height:18px;border-radius:50%;background:conic-gradient(#5aa9ff 0 50%,#ff5a5f 50% 100%);box-shadow:0 0 0 3px #0a0a0a,0 0 0 4px #2a2a2a}
 .top .sp{flex:1}
 
 .layout{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:calc(100vh - 53px)}
@@ -43,8 +43,8 @@ main{padding:22px 26px 60px;min-width:0}
 
 /* controls */
 .btn,button.btn{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:7px 12px;cursor:pointer;white-space:nowrap}
-.btn:hover{border-color:#3d4456;background:#232837}
-.btn.primary{background:var(--accent);color:#17131f;border-color:transparent;font-weight:600}
+.btn:hover{border-color:#3a3a3a;background:#222222}
+.btn.primary{background:var(--accent);color:#0a0a0a;border-color:transparent;font-weight:600}
 .btn.primary:hover{filter:brightness(1.08)}
 .btn.danger{color:var(--bad)}
 .btn.sm{padding:4px 9px;font-size:12px;border-radius:7px}
@@ -58,7 +58,7 @@ label.f{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
 .wrap{flex-wrap:wrap}
 .seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:2px}
 .seg button{background:none;border:0;padding:5px 11px;border-radius:7px;cursor:pointer;color:var(--muted)}
-.seg button.on{background:#2c3242;color:var(--text);font-weight:600}
+.seg button.on{background:#2e2e2e;color:var(--text);font-weight:600}
 
 /* sidebar */
 .sect{margin-bottom:18px}
@@ -114,7 +114,7 @@ label.f{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
 .lt select{width:auto;padding:2px 6px;font-size:12px;border-radius:999px}
 /* rating history */
 .hist-cards{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.hc{background:var(--panel);border:1px solid var(--line);border-top:3px solid #3a4152;border-radius:12px;padding:9px 13px;min-width:118px}
+.hc{background:var(--panel);border:1px solid var(--line);border-top:3px solid #383838;border-radius:12px;padding:9px 13px;min-width:118px}
 .hc.now{border-top-color:var(--c)}
 .hc-n{font-size:12px;font-weight:700}
 .hc-d{font-size:11px;color:var(--muted)}
@@ -141,8 +141,8 @@ label.f{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
 @media (max-width:1100px){.rgrid{grid-template-columns:1fr}}
 table.rt{width:100%;border-collapse:collapse}
 .rt th{font-size:12px;text-align:left;color:var(--muted);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line)}
-.rt td{padding:5px 8px;border-bottom:1px solid #1f2330;vertical-align:middle}
-.rt tr:hover td{background:#141720}
+.rt td{padding:5px 8px;border-bottom:1px solid #1e1e1e;vertical-align:middle}
+.rt tr:hover td{background:#101010}
 .rt .num{color:var(--muted);width:28px;font-variant-numeric:tabular-nums}
 .rt .tt{font-weight:500}
 .rt .len{color:var(--muted);font-variant-numeric:tabular-nums;width:48px}
@@ -168,7 +168,7 @@ table.rt{width:100%;border-collapse:collapse}
 .snapping-part #sumSnap{padding:20px;background:var(--bg)}
 table.sumtab{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 .sumtab th{font-size:12px;color:var(--muted);font-weight:600;padding:6px 4px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
-.sumtab td{padding:4px;border-bottom:1px solid #1f2330;text-align:center;font-size:13.5px}
+.sumtab td{padding:4px;border-bottom:1px solid #1e1e1e;text-align:center;font-size:13.5px}
 .sumtab .l{text-align:left;min-width:120px;font-weight:500}
 .sumtab .rk{color:var(--muted);width:40px;text-align:left}
 .sumtab .pill{display:inline-block;min-width:38px;padding:4px 5px;border-radius:7px;font-weight:600}
@@ -186,7 +186,7 @@ details.tiemore .dlist{margin-top:4px}
 .kpi-agree{grid-column:span 2}
 .kpi .agree > div{display:grid;grid-template-columns:76px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:12px}
 .kpi .agree span{color:var(--muted);white-space:nowrap}
-.kpi .agree i{display:block;height:6px;border-radius:3px;background:#262b37;overflow:hidden}
+.kpi .agree i{display:block;height:6px;border-radius:3px;background:#1e1e1e;overflow:hidden}
 .kpi .agree i b{display:block;height:100%;border-radius:3px;background:var(--both-c,#c9b6ff)}
 .kpi .agree em{font-style:normal;font-weight:800;font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
 .dlist li.sep{border-top:1px solid var(--line);margin-top:4px;padding-top:7px}
@@ -196,7 +196,7 @@ details.tiemore .dlist{margin-top:4px}
 @media (max-width:700px){.sumtab .rk,.sumtab .l{position:sticky;background:var(--panel);z-index:1}.sumtab .rk{left:0;min-width:40px;width:40px;padding-left:8px}.sumtab .l{left:40px;min-width:104px;max-width:104px}.sum-grid > div > .card{padding-left:0!important}}
 .side-sum h3{font-size:13px}
 .dlist{list-style:none;margin:0;padding:0}
-.dlist li{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px dashed #252a36;font-size:13px}
+.dlist li{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px dashed #242424;font-size:13px}
 .dlist li span:first-child{min-width:0}
 .dlist b{font-variant-numeric:tabular-nums;white-space:nowrap}
 
@@ -213,7 +213,7 @@ ol.rank-list{list-style:none;margin:0;padding:0}
 .rank-list .mv button{background:none;border:0;cursor:pointer;color:var(--muted);padding:0 3px}
 .rank-list .mv button:hover{color:var(--text)}
 .rank-list .mv .tie{font-weight:800;border-radius:5px;margin-right:2px}
-.rank-list .mv .tie.on{color:var(--warn);background:#2c3242}
+.rank-list .mv .tie.on{color:var(--warn);background:#2e2e2e}
 
 /* best of */
 .best{display:grid;gap:8px 12px;align-items:start}
@@ -234,19 +234,19 @@ ol.rank-list{list-style:none;margin:0;padding:0}
 .tnr{display:grid;grid-template-columns:48px repeat(var(--c),minmax(0,1fr)) 18px;align-items:center;gap:6px;padding:4px 6px;text-align:center;font-size:13.5px}
 .tnhead{font-size:12px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
 .tnhead span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tnrow summary{list-style:none;cursor:pointer;border-bottom:1px solid #1f2330}
+.tnrow summary{list-style:none;cursor:pointer;border-bottom:1px solid #1e1e1e}
 .tnrow summary::-webkit-details-marker{display:none}
-.tnrow summary:hover{background:#1c2030}
+.tnrow summary:hover{background:#1a1a1a}
 .tnrow .tnk{text-align:left;color:var(--muted);font-weight:600}
 .tnrow .tnar{color:var(--muted);font-size:14px;line-height:1}
 .tnrow[open] .tnar{transform:rotate(180deg)}
-.tnrow[open] summary{background:#1c2030}
+.tnrow[open] summary{background:#1a1a1a}
 .tnsongs{padding:4px 8px 10px 54px}
 .tnlist .pill,.alltab .pill{display:inline-block;min-width:38px;padding:3px 5px;border-radius:7px;font-weight:600;justify-self:center}
 .tnk4{margin-bottom:12px}
 .difftab{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 .difftab th{font-size:12px;color:var(--muted);font-weight:600;padding:4px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
-.difftab td{padding:5px 4px;border-bottom:1px dashed #252a36;text-align:center;font-size:13px}
+.difftab td{padding:5px 4px;border-bottom:1px dashed #242424;text-align:center;font-size:13px}
 .difftab .l{text-align:left;width:100%}
 .difftab .dsc{min-width:44px}
 .gapchip{display:inline-block;min-width:44px;padding:3px 6px;border-radius:7px;font-weight:700}
@@ -298,12 +298,12 @@ ol.rank-list{list-style:none;margin:0;padding:0}
 .tnote b{font-weight:600;margin-right:4px}
 table.stt{width:100%;border-collapse:collapse;font-size:14px}
 .stt th{font-size:12px;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
-.stt td{padding:6px 8px;border-bottom:1px solid #1f2330}
+.stt td{padding:6px 8px;border-bottom:1px solid #1e1e1e}
 .stt .num{color:var(--muted);width:28px}
 .stt .sv,.stt th:nth-child(n+4){text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
 table.gr{width:100%;border-collapse:collapse;font-size:13px}
 .gr th{font-size:12px;color:var(--muted);text-align:left;padding:4px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
-.gr td{padding:5px 6px;border-bottom:1px solid #1f2330}
+.gr td{padding:5px 6px;border-bottom:1px solid #1e1e1e}
 .gr .num{color:var(--muted);width:24px}
 .gr th:nth-child(n+3),.gr .rk-c{text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
 
@@ -316,7 +316,7 @@ table.mx{border-collapse:separate;border-spacing:4px;width:100%}
 @media (max-width:600px){table.mx{border-spacing:2px}.mx th{padding:2px;font-size:11px}.mx td{padding:7px 1px;font-size:10.5px;border-radius:6px}}
 .camps{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
 .camps h4{margin:0 0 6px;font-size:13px}
-.camp{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;border-bottom:1px dashed #252a36;font-size:13px}
+.camp{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;border-bottom:1px dashed #242424;font-size:13px}
 .camp b{font-variant-numeric:tabular-nums}
 
 /* group extras + charts */
@@ -344,9 +344,9 @@ table.mx{border-collapse:separate;border-spacing:4px;width:100%}
 .pi-t .v.sm{font-size:14px;font-weight:700;line-height:1.3;margin:5px 0 3px}
 .pi-t .arr{color:var(--c)}
 .pi-t .s{font-size:11.5px;color:var(--muted)}
-.meter{height:5px;background:#262b37;border-radius:3px;margin:5px 0 4px;overflow:hidden}
+.meter{height:5px;background:#1e1e1e;border-radius:3px;margin:5px 0 4px;overflow:hidden}
 .meter i{display:block;height:100%;background:var(--c);border-radius:3px}
-.pi-i{display:flex;align-items:baseline;gap:10px;padding:6px 2px;border-bottom:1px dashed #252a36;font-size:13px}
+.pi-i{display:flex;align-items:baseline;gap:10px;padding:6px 2px;border-bottom:1px dashed #242424;font-size:13px}
 .pi-i:last-child{border-bottom:0}
 .pi-i .tag{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);width:72px;flex:none;text-align:center;padding:2px 0;box-sizing:border-box}
 .pi-i .tag.up{color:var(--good)}
@@ -365,20 +365,20 @@ table.mx{border-collapse:separate;border-spacing:4px;width:100%}
 /* band view */
 .agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
 .acard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;text-align:left}
-.acard:hover{border-color:#3d4456}
+.acard:hover{border-color:#3a3a3a}
 .acard .cover{width:100%!important;height:auto!important;aspect-ratio:1}
 .acard .nm{font-weight:700;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .acard .sc{display:flex;flex-wrap:wrap;column-gap:10px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:3px}
 
 /* modal */
-.modal{position:fixed;inset:0;background:rgba(5,6,9,.7);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px;overflow:auto}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px;overflow:auto}
 .mbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;width:min(560px,100%);position:relative}
 .mbox.wide{width:min(820px,100%)}
 .mbox .x{position:absolute;top:10px;right:12px;background:none;border:0;font-size:22px;color:var(--muted);cursor:pointer}
 .results{display:grid;gap:6px;margin-top:12px;max-height:50vh;overflow:auto}
 .res{display:flex;gap:10px;align-items:center;padding:6px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);cursor:pointer;text-align:left}
 .res:hover{border-color:var(--accent)}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2c3242;border:1px solid #3d4456;padding:9px 16px;border-radius:10px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2e2e2e;border:1px solid #3a3a3a;padding:9px 16px;border-radius:10px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
 .toast.on{opacity:1}
 .empty{padding:60px 20px;text-align:center;color:var(--muted)}
 
@@ -392,7 +392,7 @@ table.mx{border-collapse:separate;border-spacing:4px;width:100%}
 
 /* exported pages: pinned summary/controls/jump bar, smooth jumps that land below it */
 html:has(.sp-sticky){scroll-behavior:smooth}
-.sp-sticky{position:sticky;top:0;z-index:15;background:rgba(14,16,21,.96);backdrop-filter:blur(8px);margin:0 -20px 18px;padding:10px 20px;border-bottom:1px solid var(--line)}
+.sp-sticky{position:sticky;top:0;z-index:15;background:rgba(10,10,10,.96);backdrop-filter:blur(8px);margin:0 -20px 18px;padding:10px 20px;border-bottom:1px solid var(--line)}
 .sp-sticky .dropbar{margin-bottom:6px}
 .sp-sticky .viewer-bar > div{margin:0 0 6px!important}
 .sp-sum{display:flex;flex-wrap:wrap;gap:8px}
@@ -442,7 +442,7 @@ a.acard,.viewer a.acard,.static a.acard{display:block;color:inherit;text-decorat
   .alb{padding:8px}
   .alb .cover{width:44px!important;height:44px!important}
   main{padding:0 12px 90px}
-  .toolbar{position:sticky;top:52px;z-index:10;margin:0 -12px 10px;padding:8px 12px;background:rgba(14,16,21,.97);border-bottom:1px solid var(--line);flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .toolbar{position:sticky;top:52px;z-index:10;margin:0 -12px 10px;padding:8px 12px;background:rgba(10,10,10,.97);border-bottom:1px solid var(--line);flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
   .toolbar::-webkit-scrollbar{display:none}
   .tabs{flex-wrap:nowrap}
   .tabs button{padding:8px 12px}
@@ -476,7 +476,7 @@ a.acard,.viewer a.acard,.static a.acard{display:block;color:inherit;text-decorat
   .tabs button{white-space:nowrap}
   .rt td.bars{display:none}
   .step{display:inline-flex;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);align-items:center;justify-content:center;font-size:22px;cursor:pointer;flex:none;touch-action:manipulation;user-select:none}
-  .step:active{background:#2c3242}
+  .step:active{background:#2e2e2e}
   .rt input.score{width:70px;height:44px;font-size:18px}
   .best{grid-template-columns:1fr!important}
   .best .bh{display:none}
@@ -520,7 +520,7 @@ const LS_KEY = 'albumDuel:' + INSTANCE;
 
 const CATS = [['best','Best song'],['fav','Favorite song'],['lyrics','Favorite lyrics'],['instr','Best song instrumentally'],['vocals','Best vocals'],['moments','Most memorable moment(s)']];
 const PAL = { grid:'#262b37', ax:'#7f879a', text:'#e9ebf1', panel:'#161922', get both() { return (S && S.ui && S.ui.both) || '#c9b6ff'; }, hot:'#ffd166', line:'#4a5163' };
-const FONT = 'Inter, system-ui, sans-serif';
+const FONT = "'Inter Tight', system-ui, sans-serif"; // single quotes: it goes inside a double-quoted SVG attribute
 
 // ---------- helpers ----------
 const $ = q => document.querySelector(q);
@@ -2457,13 +2457,13 @@ async function capture(id = 'snapArea') {
 async function captureEl(id) {
   const el = document.getElementById(id); if (!el) return null;
   document.body.classList.add('snapping'); if (id !== 'snapArea') document.body.classList.add('snapping-part');
-  try { return await html2canvas(el, { backgroundColor: '#0e1015', scale: 2, useCORS: true, logging: false, windowWidth: 1400, windowHeight: 900, onclone: async d => {
+  try { return await html2canvas(el, { backgroundColor: '#0a0a0a', scale: 2, useCORS: true, logging: false, windowWidth: 1400, windowHeight: 900, onclone: async d => {
     const e = d.getElementById(id); if (!e) return;
     balanceCols(d); // the copy is 1400px wide: two columns again even when taken on a phone
     // Text is laid out in this hidden copy, then drawn with the main page's fonts. If Inter hasn't loaded here yet
     // (common on phones) the widths disagree and words come out spread apart, so wait for it, or use system fonts in both.
     const interReady = () => [...d.fonts].some(f => /inter/i.test(f.family) && f.status === 'loaded') && [...document.fonts].some(f => /inter/i.test(f.family) && f.status === 'loaded');
-    try { await Promise.race([Promise.all(['400', '500', '600', '700', '800'].map(w => d.fonts.load(`${w} 16px Inter`))), new Promise(r => setTimeout(r, 2500))]); } catch (err) {}
+    try { await Promise.race([Promise.all(['400', '500', '600', '700', '800'].map(w => d.fonts.load(`${w} 16px "Inter Tight"`))), new Promise(r => setTimeout(r, 2500))]); } catch (err) {}
     // html2canvas paints an inset box-shadow as a solid fill: star pills get a real border in the image instead
     const sp = d.createElement('style'); sp.textContent = '.pill.star1,.pill.star2{border:2px solid #d9dde3;box-shadow:none!important}.pill.star2{border-color:#ffd34d;box-shadow:0 0 8px rgba(255,200,60,.7)!important}'; d.head.appendChild(sp);
     if (!interReady()) { const st = d.createElement('style'); st.textContent = '*{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}'; d.head.appendChild(st); }
@@ -3050,7 +3050,7 @@ function buildStaticPage(o) {
   const body = buildStaticBody(o), b = o.b;
   const css = [...document.querySelectorAll('style')].map(s => s.textContent).join('\n');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(b.name)} · Album Duel</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>${esc(b.name)} · Album Duel</title><link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>${css}
 .static .no-snap,.static [data-act=toggleAlbum]{display:none!important}
 .static .acard{cursor:default}
