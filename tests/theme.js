@@ -25,6 +25,17 @@
   T('score pill is pill', () => eq(/(^|})\.pill\{[^}]*border-radius:999px/.test(flat), true));
   T('input radius', () => eq(rad('input[type=text],input:not([type]),textarea'), '10px'));
 
+  // ---- Task 3: score scale, stars, charts, people defaults ----
+  T('RATE retuned', () => eq(RATE.map(r => r[1]), ['#1f9d55', '#57c27a', '#d9c13a', '#e8892b', '#d6453d', '#8b5cf6']));
+  T('RATE text', () => eq(RATE.map(r => r[2]), ['#fff', '#000', '#000', '#000', '#fff', '#fff']));
+  T('PAL', () => eq([PAL.grid, PAL.ax, PAL.text, PAL.panel, PAL.line], ['#1e1e1e', '#8c9196', '#d4d7db', '#141414', '#2a2a2a']));
+  T('both default', () => { const b = S.ui.both; delete S.ui.both; try { eq(PAL.both, '#c9b6ff'); } finally { if (b) S.ui.both = b; } });
+  T('people defaults', () => eq(typeof PEOPLE_COLS !== 'undefined' && PEOPLE_COLS, ['#00d1b2', '#ff4f6d', '#4aa8ff', '#ff8a3d', '#9be15d']));
+  T('no old people blue left', () => eq(/'#5aa9ff'|'#ff5a5f'/.test(js), false));
+  T('star gradient uses new green', () => eq([/#1f9d55/.test(src), /#186a3b/.test(src)], [true, false]));
+  T('logo dot teal/pink', () => eq(/\.logo \.dot\{[^}]*#00d1b2[^}]*#ff4f6d/.test(src), true));
+  T('saved colours untouched', () => eq(S.slots.every(sl => sl.people.every(p => /^#[0-9a-f]{6}$/i.test(p.color))), true));
+
   const fails = out.filter(l => l.startsWith('FAIL'));
   return `${out.length - fails.length}/${out.length} pass\n` + (fails.length ? fails.join('\n') : 'all green');
 })()

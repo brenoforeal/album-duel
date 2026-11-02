@@ -29,7 +29,7 @@ h3{font-size:15px;font-weight:700;margin-bottom:10px}
 /* top bar */
 .top{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:rgba(10,10,10,.94);backdrop-filter:blur(8px)}
 .logo{font-weight:800;letter-spacing:-.02em;font-size:17px;display:flex;align-items:center;gap:8px}
-.logo .dot{width:18px;height:18px;border-radius:50%;background:conic-gradient(#5aa9ff 0 50%,#ff5a5f 50% 100%);box-shadow:0 0 0 3px #0a0a0a,0 0 0 4px #2a2a2a}
+.logo .dot{width:18px;height:18px;border-radius:50%;background:conic-gradient(#00d1b2 0 50%,#ff4f6d 50% 100%);box-shadow:0 0 0 3px #0a0a0a,0 0 0 4px #2a2a2a}
 .top .sp{flex:1}
 
 .layout{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:calc(100vh - 53px)}
@@ -174,7 +174,7 @@ table.sumtab{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nu
 .pill{border-radius:999px}
 .sumtab .pill{display:inline-block;min-width:38px;padding:4px 5px;border-radius:999px;font-weight:600}
 .sumtab .drop .pill{text-decoration:line-through;opacity:.4}
-.pill.star1,.pill.star2{background:linear-gradient(160deg,#2a8a52 0%,#186a3b 45%,#0f4f2b 55%,#1c7543 100%);color:#fff}
+.pill.star1,.pill.star2{background:linear-gradient(160deg,#28b866 0%,#1f9d55 45%,#177a42 55%,#1c8c4c 100%);color:#fff}
 .pill.star1{box-shadow:inset 0 0 0 2px #d9dde3}
 .pill.star2{box-shadow:inset 0 0 0 2px #ffd34d,0 0 10px 1px rgba(255,200,60,.75)}
 details.tiemore{margin-top:6px}
@@ -520,7 +520,9 @@ const VIEWER = (EMB && EMB.viewer) || null; // exported read-only page: only dro
 const LS_KEY = 'albumDuel:' + INSTANCE;
 
 const CATS = [['best','Best song'],['fav','Favorite song'],['lyrics','Favorite lyrics'],['instr','Best song instrumentally'],['vocals','Best vocals'],['moments','Most memorable moment(s)']];
-const PAL = { grid:'#262b37', ax:'#7f879a', text:'#e9ebf1', panel:'#161922', get both() { return (S && S.ui && S.ui.both) || '#c9b6ff'; }, hot:'#ffd166', line:'#4a5163' };
+const PAL = { grid:'#1e1e1e', ax:'#8c9196', text:'#d4d7db', panel:'#141414', get both() { return (S && S.ui && S.ui.both) || '#c9b6ff'; }, hot:'#ffd166', line:'#2a2a2a' };
+// starting colours for new people (people already saved keep theirs)
+const PEOPLE_COLS = ['#00d1b2', '#ff4f6d', '#4aa8ff', '#ff8a3d', '#9be15d'];
 const FONT = "'Inter Tight', system-ui, sans-serif"; // single quotes: it goes inside a double-quoted SVG attribute
 
 // ---------- helpers ----------
@@ -791,7 +793,7 @@ const pn = (p, n) => esc(trunc(p.name, n));
 // whether you like the same songs whatever scale you use (r between your scores, so a harsher scorer can still be 100%)
 const corrPct = ag => ag && ag.r != null ? Math.round(ag.r * 100) : null;
 // IMDb-heatmap style colours for a 0-10 value: 9+ dark green, 8s green, 7s yellow, 6s orange, 5s red, below purple
-const RATE = [[9, '#186a3b', '#fff'], [8, '#28b463', '#0b1f12'], [7, '#f4d03f', '#2b2405'], [6, '#e67e22', '#2b1605'], [5, '#e74c3c', '#fff'], [-Infinity, '#6c3483', '#fff']];
+const RATE = [[9, '#1f9d55', '#fff'], [8, '#57c27a', '#000'], [7, '#d9c13a', '#000'], [6, '#e8892b', '#000'], [5, '#d6453d', '#fff'], [-Infinity, '#8b5cf6', '#fff']];
 const rateCol = v => RATE.find(r => v >= r[0] - 1e-9);
 // st = star level of a single score: shows 10* / 10**, in silver / gold pills unless "Star colours" is off
 const fmtSc = (v, st = 0) => st ? '10' + '*'.repeat(st) : fmtNum(v);
@@ -1853,7 +1855,7 @@ function librarySlot() {
     const top = ord[0].b;
     return { id: top.id, name: top.name, albums, relScope: top.relScope, hiddenAlbums: (top.hiddenAlbums || []).filter(id => albums.some(a => a.id === id)), best: {}, _slot: ord[0].sl.id, _key: k, _from: list };
   });
-  return { id: '__lib', name: 'My library', people: [{ id: '__me', name: mine?.name || 'Me', color: mine?.color || '#5aa9ff' }], me: '__me', bands, view: {} };
+  return { id: '__lib', name: 'My library', people: [{ id: '__me', name: mine?.name || 'Me', color: mine?.color || PEOPLE_COLS[0] }], me: '__me', bands, view: {} };
 }
 // render with another slot standing in as the current one (the library), then put everything back
 function withSlot(vs, fn) { const cur = S.cur.slot; S.slots.push(vs); S.cur.slot = vs.id; try { return fn(); } finally { S.cur.slot = cur; S.slots.splice(S.slots.indexOf(vs), 1); } }
@@ -2574,7 +2576,7 @@ function peopleModal() {
   modal(`<h2>People in “${esc(sl.name)}”</h2><p class="muted small">Scores stay attached to each person even if you rename them. Mark which one is <b>you</b>, so your own scores are never overwritten when someone shares this slot back.</p><div id="pp_list" style="margin-top:12px">${sl.people.map(row).join('')}</div>
     <div class="row" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)"><input type="color" id="pp_both" value="${PAL.both}" style="width:44px;padding:2px;height:34px"><span class="small">Colour for <b>Average</b> and <b>Score match</b></span></div>
     <div class="row" style="justify-content:space-between;margin-top:12px"><button class="btn" data-act="ppAdd">+ Add person</button><button class="btn primary" data-act="ppSave">Save</button></div>`);
-  ACT.ppAdd = () => { const d = document.createElement('div'); d.innerHTML = row({ id: 'new_' + uid(), name: '', color: ['#6fdc9a', '#ffd166', '#c9b6ff', '#ff9f5a'][sl.people.length % 4] }); $('#pp_list').appendChild(d.firstChild); };
+  ACT.ppAdd = () => { const d = document.createElement('div'); d.innerHTML = row({ id: 'new_' + uid(), name: '', color: PEOPLE_COLS[sl.people.length % PEOPLE_COLS.length] }); $('#pp_list').appendChild(d.firstChild); };
 }
 function slotModal() {
   const sl = slot();
@@ -2913,7 +2915,7 @@ const ACT = {
   slRename: () => { slot().name = $('#sl_name').value.trim() || slot().name; save(); closeModal(); renderAll(); },
   slNew: () => {
     const names = [$('#sl_me').value.trim() || 'Me', ...$('#sl_ppl').value.split(',').map(s => s.trim()).filter(Boolean)];
-    const cols = ['#5aa9ff', '#ff5a5f', '#6fdc9a', '#ffd166', '#c9b6ff'];
+    const cols = PEOPLE_COLS;
     const sl = { id: uid(), name: $('#sl_new').value.trim() || 'New slot', people: names.map((n, i) => ({ id: 'p_' + uid(), name: n, color: cols[i % cols.length] })), bands: [] };
     sl.cmp = sl.people.slice(0, 2).map(p => p.id); sl.me = sl.people[0].id; // first name listed = you
     S.slots.push(sl); S.cur = { slot: sl.id, band: null, album: null, tab: 'ratings', bandTab: 'overview' }; save(); closeModal(); renderAll();
@@ -2947,7 +2949,7 @@ const ACT = {
   },
   wlStart: () => {
     const name = $('#wl_name').value.trim(); if (!name) return toast('Type your name first');
-    const p = { id: 'p_' + uid(), name, color: '#5aa9ff' };
+    const p = { id: 'p_' + uid(), name, color: PEOPLE_COLS[0] };
     const sl = { id: uid(), name: 'My ratings', people: [p], cmp: [p.id], bands: [], me: p.id };
     S.slots.push(sl); S.cur = { slot: sl.id, band: null, album: null, tab: 'ratings', bandTab: 'overview' }; save(); renderAll();
   },
