@@ -17,6 +17,14 @@
   T('capture uses new bg + font', () => eq([/backgroundColor: '#0a0a0a'/.test(js), /16px "Inter Tight"/.test(js)], [true, true]));
   T('static export loads Inter Tight', () => eq(/family=Inter\+Tight/.test(js), true));
 
+  // ---- Task 2: rounded shapes (run where a card, a button and a text input are on screen) ----
+  const rad = sel => { const e = document.querySelector(sel); return e ? getComputedStyle(e).borderTopLeftRadius : 'missing'; };
+  const flat = src.replace(/\s/g, '');
+  T('card radius', () => eq(rad('.card'), '16px'));
+  T('button is pill', () => eq(rad('.btn'), '999px'));
+  T('score pill is pill', () => eq(/(^|})\.pill\{[^}]*border-radius:999px/.test(flat), true));
+  T('input radius', () => eq(rad('input[type=text],input:not([type]),textarea'), '10px'));
+
   const fails = out.filter(l => l.startsWith('FAIL'));
   return `${out.length - fails.length}/${out.length} pass\n` + (fails.length ? fails.join('\n') : 'all green');
 })()
