@@ -63,7 +63,7 @@ mockup *(my call — the owner picked the mockup with these)*:
 Matrix match % and correlation (`corrBand`) keep using `RATE`. Silver/gold star pills stay, restyled as pills;
 their gradient moves from the old 9+ green `#186a3b` to the new `#1f9d55` *(my call)*.
 
-Charts (`PAL`): grid `#1e1e1e`, axis/labels `--muted`, text `--text`, panel `#141414`, line `#2a2a2a`;
+Charts (`PAL`): grid `#1e1e1e`, axis/labels `--muted`, text `--text`, panel `#141414`, line `#4a4a4a` (was `#2a2a2a`: too faint, changed after review);
 `PAL.hot` stays a warm yellow. Default extra people colours (`cols` list at ~line 2915, new-person default at ~2949,
 `librarySlot` fallback at ~1855) become teal, pink, then three more picked to read well on black and stay distinct
 from teal/pink/lavender and from the star/`PAL.hot` yellows *(my call; suggestion `#4aa8ff`, `#ff8a3d`, `#9be15d`)*.
