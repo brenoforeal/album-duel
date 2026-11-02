@@ -73,7 +73,10 @@ front-end dev. Keep explanations plain, avoid wasting tokens, test changes in th
   Stats and All artists; songs tied with the last one shown go in a closed `<details class="tiemore">` (`cutTies`).
   Screenshots swap the star pills' inset shadow for a real border (html2canvas paints inset shadows solid).
   Tests: `tests/special-tens.js`, run on the app page from a local server (see the file's first lines).
-- Score cells (Rankings table, artists, history) and the matrix use IMDb-heatmap colours (`RATE`/`ratePill`): 9+ dark
+- Look ("Mix", spec `docs/superpowers/specs/2026-11-02-redesign-design.md`): true black `#0a0a0a`, Inter Tight, lavender accent
+  `#c9b6ff`, pill buttons/tabs/score pills, 16px cards, 10px inputs. New people start from `PEOPLE_COLS` (teal, pink, blue,
+  orange, green); saved people keep their colours. Tests: `tests/theme.js`; `tests/demo-data.js` fills an empty local server.
+- Score cells (Rankings table, artists, history) and the matrix use IMDb-heatmap colours (`RATE`/`ratePill`, retuned for black): 9+ dark
   green, 8s green, 7s yellow, 6s orange, 5s red, below purple. Match % maps /10; correlation uses its own steps (`corrBand`).
   Distribution: exact scores for solo/duo, half-point ranges for groups. Group matrix is a full-width card.
 - Long names are cut with `pn(p, n)` in tight headers/labels (full name in a tooltip).
